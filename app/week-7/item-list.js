@@ -1,19 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import Item from "./item";
-import itemsData from "./items.json";
 
-export default function ItemList() {
+export default function ItemList({ items }) {
   const [sortBy, setSortBy] = useState("name");
 
-  // The sorting Logic
-  const sortedItems = [...itemsData].sort((a, b) => {
+  // Sorting Logic
+  const sortedItems = [...items].sort((a, b) => {
     if (sortBy === "name") return a.name.localeCompare(b.name);
     if (sortBy === "category") return a.category.localeCompare(b.category);
     return 0;
   });
 
-  // This groups by category 
+  // Grouping Items by Category
   const groupedItems = sortedItems.reduce((acc, item) => {
     if (!acc[item.category]) acc[item.category] = [];
     acc[item.category].push(item);
@@ -21,10 +20,9 @@ export default function ItemList() {
   }, {});
 
   return (
-    <div>
+    <div className="mt-6">
       <div className="mb-4">
-        <h2 className="text-2xl font-bold text-white">Shopping List</h2>
-        <p className="text-gray-400">Sort by:</p>
+        <p className="text-white font-semibold">Sort by:</p>
         <div className="flex space-x-2 mt-2">
           <button
             onClick={() => setSortBy("name")}
@@ -38,16 +36,10 @@ export default function ItemList() {
           >
             Category
           </button>
-          <button
-            onClick={() => setSortBy("grouped")}
-            className={`px-4 py-2 rounded ${sortBy === "grouped" ? "bg-orange-600" : "bg-orange-400"} text-white`}
-          >
-            Grouped Category
-          </button>
         </div>
       </div>
 
-      {sortBy === "grouped" ? (
+      {sortBy === "category" ? (
         Object.keys(groupedItems).map((category) => (
           <div key={category} className="mb-4">
             <h3 className="text-xl font-bold text-orange-400 capitalize">{category}</h3>
@@ -62,3 +54,4 @@ export default function ItemList() {
     </div>
   );
 }
+
