@@ -1,6 +1,5 @@
 "use client";
-
-import { useContext, createContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import {
   signInWithPopup,
   signOut,
@@ -14,18 +13,13 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Sign in with GitHub (opens a popup)
   const gitHubSignIn = () => {
     const provider = new GithubAuthProvider();
     return signInWithPopup(auth, provider);
   };
 
-  // Sign out of Firebase
-  const firebaseSignOut = () => {
-    return signOut(auth);
-  };
+  const firebaseSignOut = () => signOut(auth);
 
-  // Listen for changes to the current authenticated user
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -40,6 +34,6 @@ export const AuthContextProvider = ({ children }) => {
   );
 };
 
-export const useUserAuth = () => {
-  return useContext(AuthContext);
-};
+export const useUserAuth = () => useContext(AuthContext);
+
+
